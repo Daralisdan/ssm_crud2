@@ -79,7 +79,28 @@
 
 
 	<h1>第三步：开始写项目逻辑，前端页面</h1>
-	<p></p>
+	<p>
+	<h3>
+		项目逻辑：1.首先访问index.jsp页面<br>
+		&nbsp;&nbsp;&nbsp;2.index.jsp页面发送出查询员工请求 <br>&nbsp;&nbsp;&nbsp;3.EmployeeController来接受请求，然后处理逻辑，返回数据到前台页面
+		<br>&nbsp;&nbsp;&nbsp;4.然后来到list.jsp页面进行展示 <br>
+	</h3>
+	<h4>1.前端页面规定url访问路径</h4>
+	
+	</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
 	<h1>第四步：</h1>
 	<p></p>
 </body>

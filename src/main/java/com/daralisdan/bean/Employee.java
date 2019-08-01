@@ -22,7 +22,7 @@ public class Employee {
    * date：2019年8月1日 下午1:53:28 <br> <br>
    */
   public Employee() {
-    super();
+    super(); // TODO %CodeTemplates.constructorstub.tododesc
   }
 
   /**
@@ -41,6 +41,8 @@ public class Employee {
     this.dId = dId;
 
   }
+
+
 
   public Deparment getDeparment() {
     return deparment;

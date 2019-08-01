@@ -73,7 +73,7 @@ public class MapperTest {
      * 2.1添加注解，
      * 2.2生成有参，无参构造器，步骤同上
      */
-    employeeMapper.insert(new Employee(null, "xiaogauis", "F", "xiaogauis@qq.com", 1));
+    // employeeMapper.insert(new Employee(null, "xiaogauis", "F", "xiaogauis@qq.com", 1));
     // 批量插入多个员工，批量，使用可以执行批量的sqlSession
     // for () {
     // employeeMapper.insert(new Employee(null, , "F", "xiaogauis@qq.com", 1));
@@ -84,9 +84,9 @@ public class MapperTest {
      * 2.自动注入一个SQLSession
      */
     EmployeeMapper mapper = sqlsession.getMapper(EmployeeMapper.class);
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 10; i++) {
       // 因为UUID太长了就截取0到5条
-      String uid = UUID.randomUUID().toString().substring(0,5) + i;
+      String uid = UUID.randomUUID().toString().substring(0, 5) + i;
       mapper.insertSelective(new Employee(null, uid, "M", uid + "@com", 1));
     }
     System.out.println("批量完成");
