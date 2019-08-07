@@ -64,10 +64,10 @@ public class MapperTest {
      * 1.插入几个部门
      * 1.1引入查询方法，然后在实体类中增加有参构造器，必须添加无参构造器
      */
-    // deparmentMapper.insertSelective(new Deparment(null, "开发部"));
-    // deparmentMapper.insertSelective(new Deparment(null, "测试部"));
-    // deparmentMapper.insertSelective(new Deparment(null, "人力资源部"));
-    //
+    deparmentMapper.insertSelective(new Deparment(null, "ABC"));
+    deparmentMapper.insertSelective(new Deparment(null, "测试部"));
+    deparmentMapper.insertSelective(new Deparment(null, "人力资源部"));
+    System.out.println("插入成功");
     /**
      * 2.生成员工数据
      * 2.1添加注解，
@@ -84,7 +84,7 @@ public class MapperTest {
      * 2.自动注入一个SQLSession
      */
     EmployeeMapper mapper = sqlsession.getMapper(EmployeeMapper.class);
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 1000; i++) {
       // 因为UUID太长了就截取0到5条
       String uid = UUID.randomUUID().toString().substring(0, 5) + i;
       mapper.insertSelective(new Employee(null, uid, "M", uid + "@com", 1));

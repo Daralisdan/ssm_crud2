@@ -17,7 +17,8 @@
 		mybatis与spring整合的包<br> &nbsp;&nbsp;&nbsp; 2.5数据库连接池与驱动类jar<br>
 		&nbsp;&nbsp;&nbsp; 2.7 mybatis逆向工程的jar<br> &nbsp;&nbsp;&nbsp;
 		2.6其他标配jar（jstl,servlet-api因为服务器中有api，所以需要添加scope包告诉它被提供,junit）<br>
-		&nbsp;&nbsp;&nbsp;2.8 spring单元测试的jar<br>
+		&nbsp;&nbsp;&nbsp;2.8 spring单元测试的jar<br> &nbsp;&nbsp;&nbsp;2.9
+		引入pageHelper分页jar包 pagehelper
 		3.引入bootstrap前端框架(boobootstrap,js和jquery中)
 	</p>
 	<h1>第二步：编写整合的配置文件，web.xml,spring,springmvc,mybatis的配置文件，使用mybatis的逆向工程生成对应的bean，以及mapper</h1>
@@ -85,10 +86,35 @@
 		&nbsp;&nbsp;&nbsp;2.index.jsp页面发送出查询员工请求 <br>&nbsp;&nbsp;&nbsp;3.EmployeeController来接受请求，然后处理逻辑，返回数据到前台页面
 		<br>&nbsp;&nbsp;&nbsp;4.然后来到list.jsp页面进行展示 <br>
 	</h3>
-	<h4>1.前端页面规定url访问路径</h4>
-	
+	&nbsp;&nbsp;&nbsp;1.前端页面规定url访问路径
+	<br>&nbsp;&nbsp;&nbsp;2.写一个处理器，首先
+	写一个查询所有的方法。然后返回到前端页面展示，然后新建一个对应的前端页面
+	<br>&nbsp;&nbsp;&nbsp;Controller层 @Autower注解自动装配；Service层：@Service
+	// 业务逻辑组件注解
+	<br>&nbsp;&nbsp;&nbsp;3.分页查询，在controller引入分页插件，先引入jar
+	<br>&nbsp;&nbsp;&nbsp;3.1引入jar之后，在mybatis-config全局配置中添加配置
+	<br>&nbsp;&nbsp;&nbsp;3.3在方法中添加分页相关语句
+	<br>&nbsp;&nbsp;&nbsp;4.测试。方法测试，请求测试，首先创建测试类（使用spring测试模块提供的测试请求功能，测试crud请求正确）
+	<br>&nbsp;&nbsp;&nbsp;4.1 ctrl+2 补全
 	</p>
+	<p>
+	<h3>搭建bootstrap前端页面</h3>
+	<br>&nbsp;&nbsp;&nbsp;1.在list查询页面引入bootstrap框架，全局css中的样式，组件中的样式引入
+	<br>&nbsp;&nbsp;&nbsp;2.框架搭好之后引入标签库
+	<br>&nbsp;&nbsp;&nbsp;3.写页面布局，然后传入数据
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
 
+
+
+
+
+
+
+	</p>
 
 
 

@@ -9,8 +9,14 @@
 		<!-- 开启驼峰命名规则 -->
 		<setting name="mapUnderscoreToCamelCase" value="true" />
 	</settings>
+
 	<typeAliases>
 		<!-- 实体类的别名 -->
 		<package name="com.daralisdan.bean" />
 	</typeAliases>
+	<!-- 需要写在typeAliases后边 -->
+	<plugins>
+		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+		</plugin>
+	</plugins>
 </configuration>
