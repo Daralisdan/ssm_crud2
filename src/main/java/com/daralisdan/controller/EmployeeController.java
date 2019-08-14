@@ -1,6 +1,7 @@
 package com.daralisdan.controller;
 
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.daralisdan.bean.Employee;
+import com.daralisdan.bean.Msg;
 import com.daralisdan.service.EmployeeService;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -37,7 +39,7 @@ public class EmployeeController {
    * date：2019年8月1日 下午11:05:45 <br>
    * @return <br>
    */
-  @RequestMapping("/emps")
+  // @RequestMapping("/emps")
   public String getEmps(@RequestParam(value = "pn", defaultValue = "1") Integer pn, Model model) {
 
     // 4.service可以帮助查出所有数据，然后返回一个List类型的
@@ -56,6 +58,29 @@ public class EmployeeController {
     model.addAttribute("pageInfo", page);
     // 2.返回到list页面进行展示
     return "list";
+
+  }
+
+  /**
+   * 
+   * Title：getEmps <br>
+   * Description：返回json数据的方式 <br>
+   * 分页数据以json格式返回
+   * author：yaodan  <br>
+   * date：2019年8月14日 下午4:38:05 <br>
+   * @return <br>
+   */
+  @RequestMapping("/emps")
+  @ResponseBody
+  public Msg getEmpsWithJson(@RequestParam(value = "pn", defaultValue = "1") Integer pn) {
+    // 1.引入分页插件，在查询之前只需要调用，传入页码，以及每页的大小
+    PageHelper.startPage(pn, 5);
+    // 2. startPage后面紧跟的这个查询就是一个分页查询
+    List<Employee> emps = employeeService.getAll();
+    // 3.使用pageinfo包装结果集，只需要将pageinfo交给页面
+    // pageInfo封装了详细信息，包括查询出来的数据,连续传入5页，连续显示5页
+    PageInfo page = new PageInfo(emps, 5);
+    return Msg.success().add("pageInfo", page);
 
   }
 }

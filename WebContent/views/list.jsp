@@ -36,15 +36,6 @@
 	src="<%=request.getContextPath()%>/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<!--  -->
-	<h1>ioji</h1>
-	<h1>第一步：创建maven项目,引入jar包</h1>
-	<p>
-		1.在pom.xml中指定JDK版本<br>
-	</p>
-	<button class="btn btn-success">按钮</button>
-	<button class="btn btn-success">按钮</button>
-
 
 	<div class="container">
 		<!--标题  -->
@@ -95,11 +86,7 @@
 						</tr>
 					</c:forEach>
 				</table>
-
 			</div>
-
-
-
 		</div>
 
 		<!--显示分页信息  -->
@@ -132,21 +119,21 @@
 							</c:if>
 							<c:if test="${page_num!=pageInfo.pageNum }">
 								<li>
-									<!-- 跳转到当前页 --> <a
-									href="<%=request.getContextPath()%>/emps?pn=${page_num }">${page_num }</a>
+									<!-- 跳转到当前页 -->
+									 <a href="<%=request.getContextPath()%>/emps?pn=${page_num }">${page_num }</a>
 								</li>
 							</c:if>
 						</c:forEach>
 
 						<!-- 下一页 -->
 						<c:if test="${pageInfo.hasNextPage }">
-							<li><a
-								href="<%=request.getContextPath()%>/emps?pn=${pageInfo.pageNum+1}"
-								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
+							<li>
+							<a href="<%=request.getContextPath()%>/emps?pn=${pageInfo.pageNum+1}" aria-label="Next"> <span aria-hidden="true">&raquo;</span></a>
+							</li>
 						</c:if>
-						<li><a
-							href="<%=request.getContextPath()%>/emps?pn=${pageInfo.pages }">尾页</a></li>
+						<li>
+						<a href="<%=request.getContextPath()%>/emps?pn=${pageInfo.pages }">尾页</a>
+						</li>
 					</ul>
 				</nav>
 			</div>
