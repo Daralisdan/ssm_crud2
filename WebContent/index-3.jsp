@@ -117,10 +117,50 @@
 	<br>&nbsp;&nbsp;&nbsp;1.首先引入json字符串支持的jar jackson-databind
 	<br>&nbsp;&nbsp;&nbsp;2.在Controller层写返回json数据字符串的方法
 	<br>&nbsp;&nbsp;&nbsp;3.设计一个通用的返回信息，包括状态通知给浏览器，在bean实体类中创建一个通用的返回信息的类Msg.java(通用个返回类)
+	<br>&nbsp;&nbsp;&nbsp;4.修改jsp页面，写js代码，ajax获取后台数据，并解析json数据展示在前台
+	<br>&nbsp;&nbsp;&nbsp;5.解析分页条信息，并且能跳转（需要判断）
+	<br>&nbsp;&nbsp;&nbsp;6.实现跳转之后，会有重复信息，所有在所有操作之前需要清空
+	<br>&nbsp;&nbsp;&nbsp;7.完成之后需要合理化分页，所以在mybatis配置中添加合理化分页的配置reasonable设置为true 
+	<br>&nbsp;&nbsp;&nbsp;8.修改点击事件的逻辑，禁用之后就不在点击，否则就点击
+	<br>&nbsp;&nbsp;&nbsp;9.查询部分完成了。
+	</p>
+	</p>
+
+	<h1>第五步：ajax_新增部分</h1>
+	<h5>新增页面的逻辑</h5>
+	<p>
+	
+		<br>&nbsp;&nbsp;1.在index.jsp页面点击"新增"
+		<br>&nbsp;&nbsp;2.弹出新增对话框
+		<br>&nbsp;&nbsp;3.去数据库查询部门列表，显示在对话框中
+		<br>&nbsp;&nbsp;4.用户输入数据，
+		<br>&nbsp;&nbsp;5.进行校验
+		<br>&nbsp;&nbsp;6.完成保存
+		<br>&nbsp;规定url:1./emp/{id} GET查询员工
+		<br>&nbsp;2. /emp  POST保存员工
+		<br>&nbsp;3. /emp/{id} PUT修改员工
+		<br>&nbsp;3. /emp/{id} DELETE删除员工
+		<br>&nbsp; 
+		
+		
+	</p>
+	<p>
+	<br>&nbsp;&nbsp;&nbsp;1.创建员工模态框，弹出的新增对话框
+	<br>&nbsp;&nbsp;&nbsp;2.弹出模态框之前，数据库给服务器发送一个ajax请求，获取到部门信息，并显示到下拉列表中
+	<br>&nbsp;&nbsp;&nbsp;3.完成保存，添加员工的方法   
+	<br>&nbsp;&nbsp;&nbsp;4.保存按钮的点击事件，发送ajax请求，关闭模态框，回到最后页面
+	<br>&nbsp;&nbsp;&nbsp;5.新增部分基本完成
+	<h3>jquery前端校验，用户名等等</h3>
 	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
+	</p>
+
+
+
+
+
+
+	<h1>第六步：ajax_修改部分</h1>
+	<p>
 	<br>&nbsp;&nbsp;&nbsp;
 	<br>&nbsp;&nbsp;&nbsp;
 	<br>&nbsp;&nbsp;&nbsp;
@@ -128,19 +168,14 @@
 	<br>&nbsp;&nbsp;&nbsp;
 	</p>
 
+	<h1>第七步：ajax_删除部分</h1>
+	<p>
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;
 	</p>
 
-
-
-
-
-
-
-
-
-	<h1>第五步：ajax_修改部分</h1>
-	<p></p>
-	<h1>第六步：ajax_删除部分</h1>
-	<p></p>
 </body>
 </html>

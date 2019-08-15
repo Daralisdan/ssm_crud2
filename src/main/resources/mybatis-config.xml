@@ -17,6 +17,8 @@
 	<!-- 需要写在typeAliases后边 -->
 	<plugins>
 		<plugin interceptor="com.github.pagehelper.PageInterceptor">
+		<!-- 分页参数合理化，解释参照分页插件 -->
+		<property name="reasonable" value="true"/>
 		</plugin>
 	</plugins>
 </configuration>

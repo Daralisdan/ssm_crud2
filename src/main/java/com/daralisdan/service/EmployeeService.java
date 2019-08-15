@@ -26,4 +26,16 @@ public class EmployeeService {
     return employeeMapper.selectByExampleWithdept(null);
   }
 
+ /**
+  * 
+  * Title：saveEmp <br>
+  * Description：员工保存 <br>
+  * author：yaodan  <br>
+  * date：2019年8月15日 下午9:31:58 <br>
+  * @param employee <br>
+  */
+  public void saveEmp(Employee employee) {
+    employeeMapper.insertSelective(employee);
+  }
+
 }

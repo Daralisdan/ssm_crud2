@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -83,4 +84,24 @@ public class EmployeeController {
     return Msg.success().add("pageInfo", page);
 
   }
+  
+  /**
+   * 
+   * Title：saveEmp <br>
+   * Description：新增员工，员工的保存<br>
+   * author：yaodan  <br>
+   * date：2019年8月15日 下午9:22:08 <br>
+   * @return <br>
+   */
+  @RequestMapping(value="/emp",method=RequestMethod.POST)
+  @ResponseBody
+  public Msg saveEmp(Employee employee){
+    employeeService.saveEmp(employee);
+    return Msg.success();
+    
+  }
+  
+  
+  
+  
 }
