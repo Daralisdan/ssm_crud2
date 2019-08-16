@@ -151,7 +151,16 @@
 	<br>&nbsp;&nbsp;&nbsp;4.保存按钮的点击事件，发送ajax请求，关闭模态框，回到最后页面
 	<br>&nbsp;&nbsp;&nbsp;5.新增部分基本完成
 	<h3>jquery前端校验，用户名等等</h3>
-	<br>&nbsp;&nbsp;&nbsp;
+	<br>&nbsp;&nbsp;&nbsp;1.抽取校验方法，然后单独调用
+	<br>&nbsp;&nbsp;&nbsp;2.美化校验显示信息。添加类样式CSS样式，添加span元素显示检验提示信息
+	<br>&nbsp;&nbsp;&nbsp;3.添加样式之后，验证的时候会重复显示，所以在添加之前要先清除样式
+	<h3>服务器端的校验，验证提交的数据是否有重复，即用户名是否重复</h3>
+	<br>&nbsp;&nbsp;&nbsp;1.前端：用户名id绑定change改变事件(编写change方法)，表示当用户名改变时发送ajax请求到Controller服务器端检查用户名是否可用
+	<br>&nbsp;&nbsp;&nbsp;1.1在按钮点击事件之前绑定change方法
+	<br>&nbsp;&nbsp;&nbsp;2.编写controller逻辑代码，检查用户名是否可用
+	<br>&nbsp;&nbsp;&nbsp;3.写好逻辑之后，回到前端页面，发送ajax请求验证用户名是否可用
+	<br>&nbsp;&nbsp;&nbsp;4.在按钮点击处，点击之前需要判断之前ajax请求用户名，邮箱校验是否成功，如果没有则不进行按钮ajax请求
+	<br>&nbsp;&nbsp;&nbsp;5.表单提交之前清除内容，这样就避免了提交成功的内容再次提交不进行校验
 	</p>
 
 

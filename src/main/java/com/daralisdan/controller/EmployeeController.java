@@ -84,7 +84,7 @@ public class EmployeeController {
     return Msg.success().add("pageInfo", page);
 
   }
-  
+
   /**
    * 
    * Title：saveEmp <br>
@@ -93,15 +93,35 @@ public class EmployeeController {
    * date：2019年8月15日 下午9:22:08 <br>
    * @return <br>
    */
-  @RequestMapping(value="/emp",method=RequestMethod.POST)
+  @RequestMapping(value = "/emp", method = RequestMethod.POST)
   @ResponseBody
-  public Msg saveEmp(Employee employee){
+  public Msg saveEmp(Employee employee) {
     employeeService.saveEmp(employee);
     return Msg.success();
-    
+
   }
-  
-  
-  
-  
+
+  /**
+   * 
+   * Title：checkUser <br>
+   * Description：校验用户名是否可用 <br>
+   * 传入用户名的参数
+   * author：yaodan  <br>
+   * date：2019年8月16日 下午5:05:19 <br>
+   * @return <br>
+   */
+  @ResponseBody
+  @RequestMapping("/checkuser")
+  //加上@RequestParam("empName")注解之后就是明确告诉springmvc要取出empName的值给前端（ajax请求的数据值）
+  public Msg checkUser(@RequestParam("empName")String empName) {
+    boolean b = employeeService.checkUser(empName);
+    if (b) {
+      // 如果可用,返回成功
+      return Msg.success();
+    } else {
+      return Msg.fail();
+    }
+  }
+
+
 }

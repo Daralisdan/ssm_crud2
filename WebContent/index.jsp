@@ -52,6 +52,8 @@
 			    <label class="col-sm-2 control-label">empName</label>
 			    <div class="col-sm-10">
 			      <input type="text" name="empName" class="form-control" id="empName_add_input" placeholder="empName">
+			    <!-- 添加span元素，显示检验提示的内容 -->
+			     <span class="help-block"></span>
 			    </div>
 			  </div>
 			   <!-- 邮箱 -->
@@ -59,6 +61,7 @@
 			    <label class="col-sm-2 control-label">email</label>
 			    <div class="col-sm-10">
 			      <input type="email" name="email" class="form-control" id="email_add_input" placeholder="email@qq.com">
+			      <span class="help-block"></span>
 			    </div>
 			  </div>
 			  <!-- 性别 -->
@@ -342,8 +345,13 @@ $(function(){
 //===================主页面的介绍代码==================================
 	
 	//============新增模态框的代码=========================
+		
 		//1.点击新增按钮弹出模态框
 		$("#emp_add_modal_btn").click(function(){
+			
+			//11.清除表单之前提交的数据
+			$("#empAddModal form")[0].reset();
+			
 			//1.2弹出模态框之前发送ajax请求，获取部门信息，显示在下拉列表中
 			getDepts();
 		   //1.1弹出模态框
@@ -378,6 +386,7 @@ $(function(){
 		function validate_add_form(){
 			//1.获取要检验的数据，使用正则表达式
 			//1.1首先校验姓名
+			
 			//首先获取到姓名的值
 			var empName=$("#empName_add_input").val();
 			//正则表达式检验员工姓名, (^[\u2E80-\u9FFF]{2,5}) 表示允许中文，并且要求2-5个中文字符
@@ -385,21 +394,99 @@ $(function(){
 			//alert(regName.test(empName));
 			//return false; //返回false，表示不进行下面的ajax提交
 			if (!regName.test(empName)) {
-				alert("用户名可以是2-5位中文或者6-16位英文和数字的组合");
+				//alert("用户名可以是2-5位中文或者6-16位英文和数字的组合");
+				
+				//6.优化检验显示信息
+			/* 	$("#empName_add_input").parent().addClass("has-error");
+				$("#empName_add_input").next("span").text("用户名可以是2-5位中文或者6-16位英文和数字的组合"); */
+				
+				//8.优化检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#empName_add_input","error","用户名可以是2-5位中文或者6-16位英文和数字的组合")
 				return false;
+			}else{
+				//6.1优化检验显示信息
+				/* $("#empName_add_input").parent().addClass("has-success");
+				$("#empName_add_input").next("span").text(""); */
+				
+				//8.1优化检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#empName_add_input","success","")
 			};
+			
+			
 			//2.校验邮箱，如果用户名检验成功，进行这一步
+			
 			//获取到邮箱的值
 			var email=$("#email_add_input").val();
 			var regEmail=/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
 			if (!regEmail.test(email)) {
-				alert("邮箱格式不正确");
+				//alert("邮箱格式不正确");
+				//6.2优化检验显示信息
+				/* $("#email_add_input").parent().addClass("has-error");
+				$("#email_add_input").next("span").text("邮箱格式不正确"); */
+			
+				//8.3优化检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#email_add_input","error","邮箱格式不正确")
 				return false;
+			}else{
+				//6.3优化检验显示信息
+				/* $("#email_add_input").parent().addClass("has-success");
+				$("#email_add_input").next("span").text(""); */
+				
+				//8.4优化检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#email_add_input","success","")
 			}
 			return true; //都校验成功返回true
 		}
+		 
+		//7.抽取验证的方法，验证之前要清空样式,元素传入，ele代表#email_add_input等选择器，然后在传入状态（成功与失败），然后还有提示信息
+		//显示校验的结果的提示信息
+		function show_validate_msg(ele,status,msg){
+			//7.2因为样式会记录缓存，所以在校验之前需要清除样式
+			$(ele).parent().removeClass("has-success has-error");
+			$(ele).next("span").text(""); 
+			//7.1校验逻辑
+			if ("success"==status) {
+				$(ele).parent().addClass("has-success");
+				$(ele).next("span").text(msg); 
+			}else if ("error"==status) {
+				$(ele).parent().addClass("has-error");
+				$(ele).next("span").text(msg);
+			}
+		}
 		
-		//3.保存按钮绑定单机事件
+		//9.检验用户名是否可用，绑定用户名改变检查是否可用发送ajax请求的方法
+		//给用户名绑定一个change事件，表示当用户名改变时发送ajax请求验证用户名是否可用
+		 $("#empName_add_input").change(function(){
+			 //9.2取出输入框的值然后让ajax携带该值发送给服务器
+			 var empName=this.value;//this.value表示empName_add_input输入框中的值
+			 
+			 //9.1发送ajax请求验证用户名是否可用,先在controller写业务逻辑
+			 $.ajax({
+				url:"<%=request.getContextPath()%>/checkuser",
+				type:"POST",
+				//9.3发送请求时要携带的数据就是员工姓名
+				data:"empName="+empName,
+				//9.4服务器响应成功之后，服务器会传过来一个result结果集
+				success:function(result){
+					//result有两种结果，因为返回的是msg对象，所以msg里边的code属性有两种状态
+				if (result.code==100) {
+					show_validate_msg("#empName_add_input","success","用户名可用");
+			//如果保存成功
+			$("#emp_save_btn").attr("ajax-va","success");
+				}else{
+					show_validate_msg("#empName_add_input","error","用户名不可用");
+					//如果保存失败了，
+					$("#emp_save_btn").attr("ajax-va","error");
+				}
+				}
+			 });
+			 
+		 });
+		
+		
+//==============按钮点击事件====================================================
+		
+	//3.保存按钮绑定单机事件
 		//点击保存按钮，保存员工
 		$("#emp_save_btn").click(function(){
 			//1.模态框中填写的表单数据点击保存，然后提交给服务器进行保存
@@ -407,7 +494,11 @@ $(function(){
 			if (!validate_add_form()) {
 				return false;
 			}
-			
+			//10.在点击按钮发送按钮ajax之前需要判断之前发送的ajax请求校验的用户名，邮箱是否成功。如果成功，
+			// $(this).attr("ajax-va")=="error"表示按钮保存失败时，直接返回false，不进行下面的ajax请求
+			if ($(this).attr("ajax-va")=="error") {
+				return false;
+			}
 			
 			//2.发送ajax请求保存员工
 			//表单序列化，快捷操作
