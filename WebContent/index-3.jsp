@@ -19,7 +19,8 @@
 		2.6其他标配jar（jstl,servlet-api因为服务器中有api，所以需要添加scope包告诉它被提供,junit）<br>
 		&nbsp;&nbsp;&nbsp;2.8 spring单元测试的jar <br> &nbsp;&nbsp;&nbsp;2.9
 		json数据支持的jar jackson-databind 引入pageHelper分页jar包 pagehelper
-		3.引入bootstrap前端框架(boobootstrap,js和jquery中)
+		3.引入bootstrap前端框架(boobootstrap,js和jquery中) <br>
+		&nbsp;&nbsp;&nbsp;4.引入JSR校验的jar包：Hibernate-validatorhibernate-validator的jar支持(tomcat7以上版本支持，以下的服务器,el表达式不是新的标准，需要额外的给服务器的lib包中替换新的标准el)
 	</p>
 	<h1>第二步：编写整合的配置文件，web.xml,spring,springmvc,mybatis的配置文件，使用mybatis的逆向工程生成对应的bean，以及mapper</h1>
 	<p>
@@ -120,7 +121,7 @@
 	<br>&nbsp;&nbsp;&nbsp;4.修改jsp页面，写js代码，ajax获取后台数据，并解析json数据展示在前台
 	<br>&nbsp;&nbsp;&nbsp;5.解析分页条信息，并且能跳转（需要判断）
 	<br>&nbsp;&nbsp;&nbsp;6.实现跳转之后，会有重复信息，所有在所有操作之前需要清空
-	<br>&nbsp;&nbsp;&nbsp;7.完成之后需要合理化分页，所以在mybatis配置中添加合理化分页的配置reasonable设置为true 
+	<br>&nbsp;&nbsp;&nbsp;7.完成之后需要合理化分页，所以在mybatis配置中添加合理化分页的配置reasonable设置为true
 	<br>&nbsp;&nbsp;&nbsp;8.修改点击事件的逻辑，禁用之后就不在点击，否则就点击
 	<br>&nbsp;&nbsp;&nbsp;9.查询部分完成了。
 	</p>
@@ -129,27 +130,20 @@
 	<h1>第五步：ajax_新增部分</h1>
 	<h5>新增页面的逻辑</h5>
 	<p>
-	
-		<br>&nbsp;&nbsp;1.在index.jsp页面点击"新增"
-		<br>&nbsp;&nbsp;2.弹出新增对话框
-		<br>&nbsp;&nbsp;3.去数据库查询部门列表，显示在对话框中
-		<br>&nbsp;&nbsp;4.用户输入数据，
-		<br>&nbsp;&nbsp;5.进行校验
-		<br>&nbsp;&nbsp;6.完成保存
-		<br>&nbsp;规定url:1./emp/{id} GET查询员工
-		<br>&nbsp;2. /emp  POST保存员工
-		<br>&nbsp;3. /emp/{id} PUT修改员工
-		<br>&nbsp;3. /emp/{id} DELETE删除员工
-		<br>&nbsp; 
-		
-		
+
+		<br>&nbsp;&nbsp;1.在index.jsp页面点击"新增" <br>&nbsp;&nbsp;2.弹出新增对话框
+		<br>&nbsp;&nbsp;3.去数据库查询部门列表，显示在对话框中 <br>&nbsp;&nbsp;4.用户输入数据，
+		<br>&nbsp;&nbsp;5.进行校验（前端jquery校验，ajaxy用户名校验，重要数据（JSR303后端校验）
+		唯一约束） <br>&nbsp;&nbsp;6.完成保存 <br>&nbsp;规定url:1./emp/{id}
+		GET查询员工 <br>&nbsp;2. /emp POST保存员工 <br>&nbsp;3. /emp/{id}
+		PUT修改员工 <br>&nbsp;3. /emp/{id} DELETE删除员工 <br>&nbsp;
+
+
 	</p>
 	<p>
-	<br>&nbsp;&nbsp;&nbsp;1.创建员工模态框，弹出的新增对话框
-	<br>&nbsp;&nbsp;&nbsp;2.弹出模态框之前，数据库给服务器发送一个ajax请求，获取到部门信息，并显示到下拉列表中
-	<br>&nbsp;&nbsp;&nbsp;3.完成保存，添加员工的方法   
-	<br>&nbsp;&nbsp;&nbsp;4.保存按钮的点击事件，发送ajax请求，关闭模态框，回到最后页面
-	<br>&nbsp;&nbsp;&nbsp;5.新增部分基本完成
+		<br>&nbsp;&nbsp;&nbsp;1.创建员工模态框，弹出的新增对话框 <br>&nbsp;&nbsp;&nbsp;2.弹出模态框之前，数据库给服务器发送一个ajax请求，获取到部门信息，并显示到下拉列表中
+		<br>&nbsp;&nbsp;&nbsp;3.完成保存，添加员工的方法 <br>&nbsp;&nbsp;&nbsp;4.保存按钮的点击事件，发送ajax请求，关闭模态框，回到最后页面
+		<br>&nbsp;&nbsp;&nbsp;5.新增部分基本完成
 	<h3>jquery前端校验，用户名等等</h3>
 	<br>&nbsp;&nbsp;&nbsp;1.抽取校验方法，然后单独调用
 	<br>&nbsp;&nbsp;&nbsp;2.美化校验显示信息。添加类样式CSS样式，添加span元素显示检验提示信息
@@ -161,6 +155,16 @@
 	<br>&nbsp;&nbsp;&nbsp;3.写好逻辑之后，回到前端页面，发送ajax请求验证用户名是否可用
 	<br>&nbsp;&nbsp;&nbsp;4.在按钮点击处，点击之前需要判断之前ajax请求用户名，邮箱校验是否成功，如果没有则不进行按钮ajax请求
 	<br>&nbsp;&nbsp;&nbsp;5.表单提交之前清除内容，这样就避免了提交成功的内容再次提交不进行校验
+	<h3>处理校验的细节，前后端正则表达式统一等</h3>
+	<br>&nbsp;&nbsp;&nbsp;1.找到服务器端Controller层校验的方法，编写前后端一致的正则表达式
+	<br>&nbsp;&nbsp;&nbsp;2.修改前端页面校验的提示信息，从服务器端传过来的
+	<br>&nbsp;&nbsp;&nbsp;3.清空表单的数据与样式（抽取清空的方法，然后在模态框处直接调用）
+	<h3>JSR303校验</h3>
+	<br>&nbsp;&nbsp;&nbsp;1.支持JSR303校验需要导入Hibernate-validator的jar包hibernate-validator的jar支持(tomcat7以上版本支持，以下的服务器,el表达式不是新的标准，需要额外的给服务器的lib包中替换新的标准el)
+	<br>&nbsp;&nbsp;&nbsp;2.然后在实体类中对应字段上加上验证的正则表达式注解（可以统一，也可以用它自带的验证）
+	<br>&nbsp;&nbsp;&nbsp;3.在Controller层验证时：对应方法的对象上面加上验证的注解，然后绑定校验的结果，然后校验成功，校验失败的逻辑返回给浏览器
+	<br>&nbsp;&nbsp;&nbsp;4.修改完善jquery验证代码,在点击保存按钮处写错误验证的提示代码逻辑
+	<br>&nbsp;&nbsp;&nbsp;
 	</p>
 
 
@@ -170,20 +174,14 @@
 
 	<h1>第六步：ajax_修改部分</h1>
 	<p>
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
 	</p>
 
 	<h1>第七步：ajax_删除部分</h1>
 	<p>
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
-	<br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
 	</p>
 
 </body>

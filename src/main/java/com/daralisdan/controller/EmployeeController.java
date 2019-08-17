@@ -1,10 +1,14 @@
 package com.daralisdan.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -89,15 +93,37 @@ public class EmployeeController {
    * 
    * Title：saveEmp <br>
    * Description：新增员工，员工的保存<br>
+      * 进行JSR校验：1.要支持JSR303校验
+   * 2.首先导入Hibernate-validate的jar包
    * author：yaodan  <br>
    * date：2019年8月15日 下午9:22:08 <br>
+   * @Valid 该注解表示对封装的员工数据进行验证
    * @return <br>
    */
   @RequestMapping(value = "/emp", method = RequestMethod.POST)
   @ResponseBody
-  public Msg saveEmp(Employee employee) {
-    employeeService.saveEmp(employee);
-    return Msg.success();
+  // @Valid 该注解表示对封装的员工数据进行验证,BindingResult绑定校验的结果
+  public Msg saveEmp(@Valid Employee employee, BindingResult result) {
+    if (result.hasErrors()) {
+      // 4.封装一个Map，返回错误信息给浏览器
+      Map<String, Object> map = new HashMap<String, Object>();
+      // 1.如果校验失败，不能保存员工，并且返回失败，在模态框中显示校验失败的信息
+      // 2.显示错误信息的逻辑，在result结果中提取错误信息
+      List<FieldError> errors = result.getFieldErrors();
+      // 3.遍历错误信息
+      for (FieldError fieldError : errors) {
+        System.out.println("错误字段名：" + fieldError.getField());
+        System.out.println("错误信息：" + fieldError.getDefaultMessage());
+        // 6.把错误信息写入Map中
+        map.put(fieldError.getField(), fieldError.getDefaultMessage());
+      }
+      // 7.然后把map交给浏览器显示
+      return Msg.fail().add("errorFileds", map);
+    } else {
+      // 校验成功，保存信息
+      employeeService.saveEmp(employee);
+      return Msg.success();
+    }
 
   }
 
@@ -112,14 +138,24 @@ public class EmployeeController {
    */
   @ResponseBody
   @RequestMapping("/checkuser")
-  //加上@RequestParam("empName")注解之后就是明确告诉springmvc要取出empName的值给前端（ajax请求的数据值）
-  public Msg checkUser(@RequestParam("empName")String empName) {
+  // 加上@RequestParam("empName")注解之后就是明确告诉springmvc要取出empName的值给前端（ajax请求的数据值）
+  public Msg checkUser(@RequestParam("empName") String empName) {
+    // 先判断用户名表达式是否正确合法，正确之后在判断数据库中是否有重复的用户名，该用户名是否可用，把结果返回到前台
+
+    // 声明正则表达式，与前台校验的正则表达式一致
+    String regx = "(^[a-zA-Z0-9_-]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5})";
+    // 查看用户名是否匹配这个正则表达式，String里面有个matches
+    if (!empName.matches(regx)) {
+      // 如果用户名表达式与正则表达式不匹配,返回fail
+      return Msg.fail().add("va_msg", "用户名必须是6-16位数字和字母的组合或者是2-5位的中文");
+    }
+    // 如果用户名表达式与正则表达式匹配校验成功，则进行下面的数据库校验，用户名是否重复
     boolean b = employeeService.checkUser(empName);
     if (b) {
       // 如果可用,返回成功
       return Msg.success();
     } else {
-      return Msg.fail();
+      return Msg.fail().add("va_msg", "用户名不可用");
     }
   }
 

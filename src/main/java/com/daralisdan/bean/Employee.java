@@ -1,12 +1,29 @@
 package com.daralisdan.bean;
 
+import javax.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.Email;
+
 public class Employee {
   private Integer empId;
 
+  /**
+   * JSR303验证的注解，提交的数据进行服务器端的验证
+   * @Pattern 该注解表示自定义规则
+   */
+  @Pattern(regexp="(^[a-zA-Z0-9_-]{6,16}$)|(^[\\u2E80-\\u9FFF]{2,5})",
+      message="用户名必须是2-5位中文或者6-16位英文和数字的组合")
   private String empName;
 
   private String gender;
 
+
+  /**
+   * JSR303验证的注解，提交的数据进行服务器端的验证
+   * @Pattern 该注解表示自定义规则
+   */
+  //@Email //快捷的注解，邮箱验证，也可以自定义
+  @Pattern(regexp="^([a-z0-9_\\.-]+)@([\\da-z\\.-]+)\\.([a-z\\.]{2,6})$",
+      message="邮箱格式不正确")
   private String email;
 
   private Integer dId;

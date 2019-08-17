@@ -36,63 +36,69 @@
 	src="<%=request.getContextPath()%>/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-<!-- 点击新增，弹出的新增模态框 -->
-<div class="modal fade" id="empAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">员工新增</h4>
-      </div>
-      <div class="modal-body">
-        
-        <form class="form-horizontal">
-       			 <!-- 用户名 -->
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">empName</label>
-			    <div class="col-sm-10">
-			      <input type="text" name="empName" class="form-control" id="empName_add_input" placeholder="empName">
-			    <!-- 添加span元素，显示检验提示的内容 -->
-			     <span class="help-block"></span>
-			    </div>
-			  </div>
-			   <!-- 邮箱 -->
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">email</label>
-			    <div class="col-sm-10">
-			      <input type="email" name="email" class="form-control" id="email_add_input" placeholder="email@qq.com">
-			      <span class="help-block"></span>
-			    </div>
-			  </div>
-			  <!-- 性别 -->
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">gender</label>
-			    <div class="col-sm-10">
-				    <label class="radio-inline">
-						 <input type="radio" name="gender" id="gender1_add_input" value="M" checked="checked">男
-					</label>
-					<label class="radio-inline">
-						  <input type="radio" name="gender" id="gender2_add_input" value="F"> 女
-					</label>
-			    </div>
-			  </div>
-			 <!-- 部门-->
-			  <div class="form-group">
-			    <label class="col-sm-2 control-label">deptName</label>
-			    <div class="col-sm-4">
-			    <!--部门提交，提交部门id即可  -->
-				    <select class="form-control" name="dId" id="dept_add_select"></select>
-			    </div>
-			  </div>
-			</form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary" id="emp_save_btn">保存</button>
-      </div>
-    </div>
-  </div>
-</div>
+	<!-- 点击新增，弹出的新增模态框 -->
+	<div class="modal fade" id="empAddModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">员工新增</h4>
+				</div>
+				<div class="modal-body">
+
+					<form class="form-horizontal">
+						<!-- 用户名 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">empName</label>
+							<div class="col-sm-10">
+								<input type="text" name="empName" class="form-control"
+									id="empName_add_input" placeholder="empName">
+								<!-- 添加span元素，显示检验提示的内容 -->
+								<span class="help-block"></span>
+							</div>
+						</div>
+						<!-- 邮箱 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">email</label>
+							<div class="col-sm-10">
+								<input type="email" name="email" class="form-control"
+									id="email_add_input" placeholder="email@qq.com"> <span
+									class="help-block"></span>
+							</div>
+						</div>
+						<!-- 性别 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">gender</label>
+							<div class="col-sm-10">
+								<label class="radio-inline"> <input type="radio"
+									name="gender" id="gender1_add_input" value="M"
+									checked="checked">男
+								</label> <label class="radio-inline"> <input type="radio"
+									name="gender" id="gender2_add_input" value="F"> 女
+								</label>
+							</div>
+						</div>
+						<!-- 部门-->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">deptName</label>
+							<div class="col-sm-4">
+								<!--部门提交，提交部门id即可  -->
+								<select class="form-control" name="dId" id="dept_add_select"></select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="emp_save_btn">保存</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 
@@ -101,7 +107,7 @@
 
 
 
-<!-- ============主页面显示======================================================== -->
+	<!-- ============主页面显示======================================================== -->
 	<div class="container">
 		<!--标题  -->
 		<div class="row">
@@ -164,8 +170,8 @@
 
 
 
-<!--============ js代码==============================================-->
-<script type="text/javascript">
+	<!--============ js代码==============================================-->
+	<script type="text/javascript">
 //定义一个全局变量，保存总记录数
 var totalRecord;
 
@@ -346,11 +352,26 @@ $(function(){
 	
 	//============新增模态框的代码=========================
 		
+		//12.提取表单重置的方法
+		//参数ele表示要重置的哪个元素，不是固定的，动态参数
+		function reset_form(ele){
+		//清空表单数据	
+		$(ele)[0].reset();
+		//find("*")表示表单后的所有样式
+		$(ele).find("*").removeClass("has-error has-success");
+		//清空内容
+		$(ele).find(".help-block").text("");
+	}
+
+		
+		
 		//1.点击新增按钮弹出模态框
 		$("#emp_add_modal_btn").click(function(){
-			
-			//11.清除表单之前提交的数据
-			$("#empAddModal form")[0].reset();
+			//
+			//11.清除表单之前提交的数据(应该是表单完整重置包括表单数据，表单样式)
+			//$("#empAddModal form")[0].reset();
+			//调用表单重置的方法
+			reset_form("#empAddModal form");
 			
 			//1.2弹出模态框之前发送ajax请求，获取部门信息，显示在下拉列表中
 			getDepts();
@@ -474,7 +495,8 @@ $(function(){
 			//如果保存成功
 			$("#emp_save_btn").attr("ajax-va","success");
 				}else{
-					show_validate_msg("#empName_add_input","error","用户名不可用");
+					//va-msg 是校验数据库用户名是否有重复的提示信息Controller传过来的提示信息
+					show_validate_msg("#empName_add_input","error",result.extend.va_msg);
 					//如果保存失败了，
 					$("#emp_save_btn").attr("ajax-va","error");
 				}
@@ -491,9 +513,10 @@ $(function(){
 		$("#emp_save_btn").click(function(){
 			//1.模态框中填写的表单数据点击保存，然后提交给服务器进行保存
 			//4.先对提交给服务器的数据进行校验
-			if (!validate_add_form()) {
+			//前端校验
+			/*  if (!validate_add_form()) {
 				return false;
-			}
+			}   */
 			//10.在点击按钮发送按钮ajax之前需要判断之前发送的ajax请求校验的用户名，邮箱是否成功。如果成功，
 			// $(this).attr("ajax-va")=="error"表示按钮保存失败时，直接返回false，不进行下面的ajax请求
 			if ($(this).attr("ajax-va")=="error") {
@@ -505,22 +528,43 @@ $(function(){
 			//alert($("#empAddModal form").serialize());
 			$.ajax({
 				url:"<%=request.getContextPath()%>/emp",
-				type:"POST",
+				type : "POST",
 				//发送请求的数据
-				data:$("#empAddModal form").serialize(),
-				success:function(result){
+				data : $("#empAddModal form").serialize(),
+				success : function(result) {
 					//alert(result.msg);
-					//员工保存，1、员工保存之后关闭模态框，2.来到最后一页并显示保存的数据
-					//3.1 员工保存之后关闭模态框
-					$("#empAddModal").modal('hide')
-					
-					//3.2.来到最后一页并显示保存的数据
-					//3.2.1发送ajax请求显示最后一页数据即可
-					//总记录数当做页码
-					to_page(totalRecord);
+
+					//JSR303校验 先进行判断
+					//如果状态码是正确的，验证成功了，才关闭保存模态框，否则用户校验失败，显示失败信息
+					if (result.code == 100) {
+
+						//员工保存，1、员工保存之后关闭模态框，2.来到最后一页并显示保存的数据
+						//3.1 员工保存之后关闭模态框
+						$("#empAddModal").modal('hide')
+
+						//3.2.来到最后一页并显示保存的数据
+						//3.2.1发送ajax请求显示最后一页数据即可
+						//总记录数当做页码
+						to_page(totalRecord);
+
+					} else {
+						//否则用户校验失败，显示失败信息
+						//显示失败信息(集中在用户名，邮箱)，有哪个字段的错误信息就显示哪个
+						//console.log(result);
+						//undefind表示未定义，如果有邮箱不是未定义就显示邮箱的错误信息，下面同理
+						if (undefined !=result.extend.errorFileds.email) {
+							//显示邮箱错误信息
+							show_validate_msg("#email_add_input","error",result.extend.errorFileds.email);
+						}
+						if (undefined !=result.extend.errorFileds.empName) {
+							//显示名字错误信息
+							show_validate_msg("#empName_add_input","error",result.extend.errorFileds.empName);
+						}
+					}
+
 				}
 			});
-			
+
 		});
 	</script>
 

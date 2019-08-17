@@ -144,6 +144,13 @@
 			<version>${jackson-databind-version}</version>
 		</dependency>
 
+		<!-- JSR303数据校验,hibernate-validator的jar支持(tomcat7以上版本支持，以下的服务器,el表达式不是新的标准，需要额外的给服务器的lib包中替换新的标准el) -->
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.4.1.Final</version>
+		</dependency>
+		
 	</dependencies>
 
 
