@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -158,6 +160,27 @@ public class EmployeeController {
       return Msg.fail().add("va_msg", "用户名不可用");
     }
   }
+
+  /**
+   * 
+   * Title：getEmp <br>
+   * Description：根据员工id查询员工信息 <br>
+   * author：yaodan  <br>
+   * date：2019年8月18日 下午9:13:38 <br>
+   * @return <br>
+   */
+  @RequestMapping(value = "/emp/{id}", method = RequestMethod.GET)
+  @ResponseBody
+  //Integer id 员工id的值来源于请求地址中的变量，使用@PathVariable该注解指定从路径中取出的id值
+  //表示从前台获取到的员工id(传过来的id),Msg表示返回的数据都放在Msg中
+  public Msg getEmp(@PathVariable("id") Integer id) {
+    //然后根据id查询，返回employee对象
+    Employee employee = employeeService.getEmp(id);
+    //把返回的employee对象的内容放在emp中，返回出去
+    return Msg.success().add("emp", employee);
+
+  }
+
 
 
 }

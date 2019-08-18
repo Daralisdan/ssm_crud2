@@ -140,6 +140,20 @@
 		=#{empId,jdbcType=INTEGER}
 	</select>
 
+
+  <!--根据员工主键id查询员工信息 -->
+	<select id="selectByPrimaryKey"
+		parameterType="com.daralisdan.bean.EmployeeExample"
+		resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List" />
+		from tbl_emp
+		WHERE emp_id=#{empId,jdbcType=INTEGER}
+	</select>
+
+
+
+
 	<!-- 查询员工不带部门信息 -->
 	<select id="selectByExample"
 		parameterType="com.daralisdan.bean.EmployeeExample"

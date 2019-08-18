@@ -128,15 +128,20 @@
 	</p>
 
 	<h1>第五步：ajax_新增部分</h1>
-	<h5>新增页面的逻辑</h5>
 	<p>
-
-		<br>&nbsp;&nbsp;1.在index.jsp页面点击"新增" <br>&nbsp;&nbsp;2.弹出新增对话框
-		<br>&nbsp;&nbsp;3.去数据库查询部门列表，显示在对话框中 <br>&nbsp;&nbsp;4.用户输入数据，
-		<br>&nbsp;&nbsp;5.进行校验（前端jquery校验，ajaxy用户名校验，重要数据（JSR303后端校验）
-		唯一约束） <br>&nbsp;&nbsp;6.完成保存 <br>&nbsp;规定url:1./emp/{id}
-		GET查询员工 <br>&nbsp;2. /emp POST保存员工 <br>&nbsp;3. /emp/{id}
-		PUT修改员工 <br>&nbsp;3. /emp/{id} DELETE删除员工 <br>&nbsp;
+	<h5>新增页面的逻辑</h5>
+	<br>&nbsp;&nbsp;1.在index.jsp页面点击"新增"
+	<br>&nbsp;&nbsp;2.弹出新增对话框
+	<br>&nbsp;&nbsp;3.去数据库查询部门列表，显示在对话框中
+	<br>&nbsp;&nbsp;4.用户输入数据，
+	<br>&nbsp;&nbsp;5.进行校验（前端jquery校验，ajaxy用户名校验，重要数据（JSR303后端校验）
+	唯一约束）
+	<br>&nbsp;&nbsp;6.完成保存
+	<br>&nbsp;规定url:1./emp/{id} GET查询员工
+	<br>&nbsp;2. /emp POST保存员工
+	<br>&nbsp;3. /emp/{id} PUT修改员工
+	<br>&nbsp;3. /emp/{id} DELETE删除员工
+	<br>&nbsp;
 
 
 	</p>
@@ -164,18 +169,31 @@
 	<br>&nbsp;&nbsp;&nbsp;2.然后在实体类中对应字段上加上验证的正则表达式注解（可以统一，也可以用它自带的验证）
 	<br>&nbsp;&nbsp;&nbsp;3.在Controller层验证时：对应方法的对象上面加上验证的注解，然后绑定校验的结果，然后校验成功，校验失败的逻辑返回给浏览器
 	<br>&nbsp;&nbsp;&nbsp;4.修改完善jquery验证代码,在点击保存按钮处写错误验证的提示代码逻辑
-	<br>&nbsp;&nbsp;&nbsp;
 	</p>
-
-
-
-
 
 
 	<h1>第六步：ajax_修改部分</h1>
 	<p>
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+	<h3>修改更新部分的逻辑</h3>
+	<br>&nbsp;&nbsp;&nbsp;1.点击编辑按钮
+	<br>&nbsp;&nbsp;&nbsp;2.弹出用户修改的模态框
+	<br>&nbsp;&nbsp;&nbsp;3.然后点击更新按钮，完成用户修改
+	</p>
+	<p>
+		<br>&nbsp;&nbsp;&nbsp;1.首先创建点击编辑的时候弹出的模态框 <br>&nbsp;&nbsp;&nbsp;2.点击编辑按钮弹出模态框，在创建编辑删除按钮的class样式中给编辑，删除按钮添加标识edit_btn,del_btn
+		<br>&nbsp;&nbsp;&nbsp;3.然后给编辑按钮绑定点击事件 <br>&nbsp;&nbsp;&nbsp;3.1弹出模态框
+		<br>&nbsp;&nbsp;&nbsp;3.1.1首先在点击弹出模态框之前要查处员工与部门信息并显示 
+		<br>&nbsp;&nbsp;&nbsp;4.修改查出部门信息的方法，js代码（getDepts(ele)处修改），传入元素使需要查询显示部门信息的地方动态传入参数
+		<br>&nbsp;&nbsp;&nbsp;5.调用查询方法显示信息在下拉列表之后，由于多次点击，则会多次查询显示，所以在调用方法之前需要清空下拉列表数据显示
+	    <br>&nbsp;&nbsp;&nbsp;5.1清空下拉列表数据显示($(ele).empty();)
+	    <br>&nbsp;&nbsp;&nbsp;6.点击编辑，模态框显示员工信息（发送ajax请求去服务器查询到当前需要修改的员工信息）然后显示在模态框中
+		<br>&nbsp;&nbsp;&nbsp; 6.1先修改模态框，参照bootStrap Css样式静态控件
+		<br>&nbsp;&nbsp;&nbsp; 7.发送查询员工信息的ajax前需要在服务器端写查询方法（controller层）
+		<br>&nbsp;&nbsp;&nbsp;8.为员工编辑按钮添加一个自定义属性，来表示当前员工的id（在创建编辑按钮处添加），然后在调用查询员工信息方法的时候，定义被点击的按钮，然后获取按钮员工的id
+		<br>&nbsp;&nbsp;&nbsp;9.运行测试时报错，显示没有找到主键查询的方法，这时就要自己写select 查询语句，这是因为逆向生成的时候没有，需要不同的查询方法，则可以自己定义
+		 <br>&nbsp;&nbsp;&nbsp; 10.在服务器返回的数据中拿到员工数据
+		 <br>&nbsp;&nbsp;&nbsp;11.在对话框指定位置显示对应数据
+		<br>&nbsp;&nbsp;&nbsp;12.给更新按钮绑定点击事件，点击更新按钮，完成保存
 	</p>
 
 	<h1>第七步：ajax_删除部分</h1>

@@ -36,7 +36,74 @@
 	src="<%=request.getContextPath()%>/static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </head>
 <body>
-	<!-- 点击新增，弹出的新增模态框 -->
+
+
+<!-- 点击编辑，弹出的模态框================================================================ -->
+<div class="modal fade" id="empUpdateModal" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title">员工修改</h4>
+				</div>
+				<div class="modal-body">
+
+					<form class="form-horizontal">
+						<!-- 用户名 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">empName</label>
+							<div class="col-sm-10">
+							<!-- 用户名静态显示 -->
+							  <p class="form-control-static" id="empName_update_static"> </p>
+							</div>
+						</div>
+						<!-- 邮箱 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">email</label>
+							<div class="col-sm-10">
+								<input type="email" name="email" class="form-control"
+									id="email_update_input" placeholder="email@qq.com"> <span
+									class="help-block"></span>
+							</div>
+						</div>
+						<!-- 性别 -->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">gender</label>
+							<div class="col-sm-10">
+								<label class="radio-inline"> <input type="radio"
+									name="gender" id="gender1_update_input" value="M"
+									checked="checked">男
+								</label> <label class="radio-inline"> <input type="radio"
+									name="gender" id="gender2_update_input" value="F"> 女
+								</label>
+							</div>
+						</div>
+						<!-- 部门-->
+						<div class="form-group">
+							<label class="col-sm-2 control-label">deptName</label>
+							<div class="col-sm-4">
+								<!--部门提交，提交部门id即可  -->
+								<select class="form-control" name="dId" id="dept_update_select"></select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" id="emp_update_btn">更新</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+<!--== 点击新增，弹出的新增模态框 =======================================================================================-->
 	<div class="modal fade" id="empAddModal" tabindex="-1" role="dialog"
 		aria-labelledby="myModalLabel">
 		<div class="modal-dialog" role="document">
@@ -100,14 +167,7 @@
 		</div>
 	</div>
 
-
-
-
-
-
-
-
-	<!-- ============主页面显示======================================================== -->
+<!--== ============主页面显示=================================================================== -->
 	<div class="container">
 		<!--标题  -->
 		<div class="row">
@@ -156,21 +216,7 @@
 		</div>
 	</div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	<!--============ js代码==============================================-->
+<!--============ js代码===================================================================-->
 	<script type="text/javascript">
 //定义一个全局变量，保存总记录数
 var totalRecord;
@@ -234,8 +280,11 @@ $(function(){
 										编辑
 									</button>
 					*/
-					var editBtn=$("<button></button>").addClass("btn btn-primary btn-sm")
+					var editBtn=$("<button></button>").addClass("btn btn-primary btn-sm edit_btn")
 					.append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
+					
+					//为编辑按钮添加一个自定义属性，来表示当前员工id,item.empId表示员工id的值
+					editBtn.attr("edit-id",item.empId)
 					
 					//删除按钮
 					/**
@@ -244,7 +293,7 @@ $(function(){
 								删除
 									</button>
 					*/
-					var delBtn=$("<button></button>").addClass("btn btn-danger btn-sm")
+					var delBtn=$("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
 					.append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
 					
 					//把按钮放在一个单元格中
@@ -348,9 +397,9 @@ $(function(){
 			//5.把导航条添加到要显示导航条的区域
 			navEle.appendTo("#page_nav_area");
 		}
-//===================主页面的介绍代码==================================
+//===================主页面的介绍代码==========================================================================
 	
-	//============新增模态框的代码=========================
+//============新增模态框的代码============================================================================
 		
 		//12.提取表单重置的方法
 		//参数ele表示要重置的哪个元素，不是固定的，动态参数
@@ -374,7 +423,9 @@ $(function(){
 			reset_form("#empAddModal form");
 			
 			//1.2弹出模态框之前发送ajax请求，获取部门信息，显示在下拉列表中
-			getDepts();
+			//getDepts();
+			//动态传入参数，查询出来的信息放在哪里，放在dept_add_selec处
+			getDepts("#dept_add_select");
 		   //1.1弹出模态框
 			$("#empAddModal").modal({
 				backdrop:"static"//背景删除，设置为背景不删除
@@ -382,7 +433,11 @@ $(function(){
 		});
 		
 		//1.3提取方法，查询出所有的部门信息并显示在下拉列表中
-		function getDepts(){
+		//动态传入参数，ele表示需要显示的地方的参数
+		function getDepts(ele){
+			//清空下拉列表数据显示
+			$(ele).empty();
+			
 			//向服务器（controller层路径）获取部门信息
 			$.ajax({
 				//controller层获取部门信息方法的路径
@@ -397,7 +452,8 @@ $(function(){
 				 $.each(result.extend.depts,function(){
 					 //构建元素option
 					 var optionEle=$("<option></option>").append(this.deptName).attr("value",this.deptId);
-					 optionEle.appendTo("#dept_add_select");
+					 //optionEle.appendTo("#dept_add_select");
+					 optionEle.appendTo(ele);
 				 });
 				}
 			});
@@ -506,7 +562,7 @@ $(function(){
 		 });
 		
 		
-//==============按钮点击事件====================================================
+//==============按钮点击事件========================================================================
 		
 	//3.保存按钮绑定单机事件
 		//点击保存按钮，保存员工
@@ -564,8 +620,55 @@ $(function(){
 
 				}
 			});
-
 		});
+		
+//================点击编辑按钮绑定事件，弹出模态框==================================================================================		
+	//如果按钮创建之前就去绑定click，这时绑定不上
+	//1.可以创建按钮的时候绑定，然后绑定点击 .live()(live点击事件也是不可行的，因为jquery新版没有live),所有使用On代替live;
+	$(document).on("click",".edit_btn",function(){
+		//alert("edit");
+		
+	   //1.2查出部门信息,并显示在部门下拉列表中
+	   //1.2.1调用查询部门信息的方法，显示在编辑的模态框的下拉列表中(选择器可以写模态框中的下拉列表选择器，也可以写下拉列表元素中的id选择器)
+	   getDepts("#empUpdateModal select");
+	   
+	 //1.1查出员工信息，显示员工信息，
+	 //this表示当前被点击的按钮，然后找到点击被点击的id属性
+	   getEmp($(this).attr("edit-id"));
+	 
+	   //0.弹出模态框
+		$("#empUpdateModal").modal({
+			backdrop:"static"//背景删除，设置为背景不删除
+		});
+	});
+	
+	//2.查询员工信息，并显示的方法
+	function getEmp(id){
+		//2.1发送ajax请求之前需要在服务器端写一个请求的处理器即在controller层写处理请求的方法，然后在发送请求
+		$.ajax({
+			url:"<%=request.getContextPath()%>/emp/"+id,
+			type:"GET",
+			//ajax请求成功以后，服务器会返回一个员工的数据
+			success:function(result){
+				//console.log(result);
+				//3.拿到员工数据进行显示
+				var empData=result.extend.emp;
+				//获取用户名
+				$("#empName_update_static").text(empData.empName);
+				//获取邮箱
+				$("#email_update_input").val(empData.email);
+				//获取性别
+				$("#empUpdateModal input[name=gender]").val([empData.gender]);
+			//部门下拉列表
+			$("#empUpdateModal select").val([empData.dId]);
+			}
+		});
+	}
+	
+	
+	
+	
+//================点击更新按钮，绑定点击事件，完成更新保存=================================================
 	</script>
 
 </body>
