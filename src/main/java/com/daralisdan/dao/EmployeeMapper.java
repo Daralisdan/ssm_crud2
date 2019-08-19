@@ -7,9 +7,18 @@ import org.apache.ibatis.annotations.Param;
 
 public interface EmployeeMapper {
   long countByExample(EmployeeExample example);
-
+  
   int deleteByExample(EmployeeExample example);
 
+  /**
+   * 
+   * Title：deleteByPrimaryKey <br>
+   * Description：根据员工id删除<br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 下午7:07:32 <br>
+   * @param empId
+   * @return <br>
+   */
   int deleteByPrimaryKey(Integer empId);
 
   int insert(Employee record);
@@ -33,9 +42,18 @@ public interface EmployeeMapper {
 
   int updateByExample(@Param("record") Employee record, @Param("example") EmployeeExample example);
 
-  int updateByprimaryKeySelective(Employee record);
+  /**
+   * 
+   * Title：updateByprimaryKeySelective <br>
+   * Description：根据id更新员工信息<br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 上午11:48:33 <br>
+   * @param record
+   * @return <br>
+   */
+  int updateByprimaryKeySelective(@Param("record")Employee record);
 
-  int updateByprimaryKey(Employee record);
+  int updateByprimaryKey(@Param("record")Employee record);
 
 
 }

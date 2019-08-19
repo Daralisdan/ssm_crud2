@@ -151,9 +151,6 @@
 		WHERE emp_id=#{empId,jdbcType=INTEGER}
 	</select>
 
-
-
-
 	<!-- 查询员工不带部门信息 -->
 	<select id="selectByExample"
 		parameterType="com.daralisdan.bean.EmployeeExample"
@@ -172,6 +169,39 @@
 		</if>
 	</select>
 
+
+
+<!-- 1.根据员工id更新员工信息 updateByprimaryKeySelective,record是在dao层加上的注解 -->
+	<update id="updateByprimaryKeySelective" parameterType="map">
+		update tbl_emp
+		<set>
+			<if test="record.empId != null">
+				emp_id = #{record.empId,jdbcType=INTEGER},
+			</if>
+			<if test="record.empName != null">
+				emp_name = #{record.empName,jdbcType=VARCHAR},
+			</if>
+			<if test="record.gender != null">
+				gender = #{record.gender,jdbcType=CHAR},
+			</if>
+			<if test="record.email != null">
+				email = #{record.email,jdbcType=VARCHAR},
+			</if>
+			<if test="record.dId != null">
+				d_id = #{record.dId,jdbcType=INTEGER},
+			</if>
+		</set>
+			WHERE emp_id=#{record.empId,jdbcType=INTEGER}
+</update>
+
+<!-- 根据id删除员工信息        deleteByPrimaryKey WHERE emp_id=#{empId,jdbcType=INTEGER} -->
+ <delete id="deleteByPrimaryKey"
+		parameterType="com.daralisdan.bean.EmployeeExample">
+		delete from tbl_emp
+		WHERE emp_id=#{empId,jdbcType=INTEGER}
+	</delete>
+	
+	
 	<delete id="deleteByExample"
 		parameterType="com.daralisdan.bean.EmployeeExample">
 		delete from tbl_emp

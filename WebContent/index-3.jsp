@@ -182,24 +182,48 @@
 	<p>
 		<br>&nbsp;&nbsp;&nbsp;1.首先创建点击编辑的时候弹出的模态框 <br>&nbsp;&nbsp;&nbsp;2.点击编辑按钮弹出模态框，在创建编辑删除按钮的class样式中给编辑，删除按钮添加标识edit_btn,del_btn
 		<br>&nbsp;&nbsp;&nbsp;3.然后给编辑按钮绑定点击事件 <br>&nbsp;&nbsp;&nbsp;3.1弹出模态框
-		<br>&nbsp;&nbsp;&nbsp;3.1.1首先在点击弹出模态框之前要查处员工与部门信息并显示 
-		<br>&nbsp;&nbsp;&nbsp;4.修改查出部门信息的方法，js代码（getDepts(ele)处修改），传入元素使需要查询显示部门信息的地方动态传入参数
+		<br>&nbsp;&nbsp;&nbsp;3.1.1首先在点击弹出模态框之前要查处员工与部门信息并显示 <br>&nbsp;&nbsp;&nbsp;4.修改查出部门信息的方法，js代码（getDepts(ele)处修改），传入元素使需要查询显示部门信息的地方动态传入参数
 		<br>&nbsp;&nbsp;&nbsp;5.调用查询方法显示信息在下拉列表之后，由于多次点击，则会多次查询显示，所以在调用方法之前需要清空下拉列表数据显示
-	    <br>&nbsp;&nbsp;&nbsp;5.1清空下拉列表数据显示($(ele).empty();)
-	    <br>&nbsp;&nbsp;&nbsp;6.点击编辑，模态框显示员工信息（发送ajax请求去服务器查询到当前需要修改的员工信息）然后显示在模态框中
-		<br>&nbsp;&nbsp;&nbsp; 6.1先修改模态框，参照bootStrap Css样式静态控件
-		<br>&nbsp;&nbsp;&nbsp; 7.发送查询员工信息的ajax前需要在服务器端写查询方法（controller层）
-		<br>&nbsp;&nbsp;&nbsp;8.为员工编辑按钮添加一个自定义属性，来表示当前员工的id（在创建编辑按钮处添加），然后在调用查询员工信息方法的时候，定义被点击的按钮，然后获取按钮员工的id
-		<br>&nbsp;&nbsp;&nbsp;9.运行测试时报错，显示没有找到主键查询的方法，这时就要自己写select 查询语句，这是因为逆向生成的时候没有，需要不同的查询方法，则可以自己定义
-		 <br>&nbsp;&nbsp;&nbsp; 10.在服务器返回的数据中拿到员工数据
-		 <br>&nbsp;&nbsp;&nbsp;11.在对话框指定位置显示对应数据
-		<br>&nbsp;&nbsp;&nbsp;12.给更新按钮绑定点击事件，点击更新按钮，完成保存
+		<br>&nbsp;&nbsp;&nbsp;5.1清空下拉列表数据显示($(ele).empty();) <br>&nbsp;&nbsp;&nbsp;6.点击编辑，模态框显示员工信息（发送ajax请求去服务器查询到当前需要修改的员工信息）然后显示在模态框中
+		<br>&nbsp;&nbsp;&nbsp; 6.1先修改模态框，参照bootStrap Css样式静态控件 <br>&nbsp;&nbsp;&nbsp;
+		7.发送查询员工信息的ajax前需要在服务器端写查询方法（controller层） <br>&nbsp;&nbsp;&nbsp;8.为员工编辑按钮添加一个自定义属性，来表示当前员工的id（在创建编辑按钮处添加），然后在调用查询员工信息方法的时候，定义被点击的按钮，然后获取按钮员工的id
+		<br>&nbsp;&nbsp;&nbsp;9.运行测试时报错，显示没有找到主键查询的方法，这时就要自己写select
+		查询语句，这是因为逆向生成的时候没有，需要不同的查询方法，则可以自己定义 <br>&nbsp;&nbsp;&nbsp;
+		10.在服务器返回的数据中拿到员工数据 <br>&nbsp;&nbsp;&nbsp;11.在对话框指定位置显示对应数据 <br>&nbsp;&nbsp;&nbsp;12.给更新按钮绑定点击事件，点击更新按钮，完成保存
+		<br>&nbsp;&nbsp;&nbsp;12.1验证邮箱 <br>&nbsp;&nbsp;&nbsp;12.2发送ajax请求保存员工更新的数据，在发送ajax请求之前需要在服务器层（controller层写保存更新员工的信息的方法），即请求处理的方法
+		<br>&nbsp;&nbsp;&nbsp;13.处理ajax请求的方法写好之后，然后就写ajax，发送ajax请求更新员工 <br>&nbsp;&nbsp;&nbsp;13.1测试报错时，没有在mapper中写修改的sql语句可以自定义添加上，还要在dao层接口中定义该方法
+		<br>&nbsp;&nbsp;&nbsp;13.2服务器发送去请求时PUT，ajax发送的请求时POST，这时ajax中就要加上(&_method=PUT)的方法，还需要在web.xml中配置处理rest风格的请求的过滤器
+		<br>&nbsp;&nbsp;&nbsp;14.修改保存测试成功后，关闭对话框，回到当前页面 <br>&nbsp;&nbsp;&nbsp;14.1定义一个全局变量，赋值当前页码数，然后调用回到当前页码的方法传入全局变量的参数
+		<br>&nbsp;&nbsp;&nbsp;15.修改部分完成了
+
 	</p>
 
 	<h1>第七步：ajax_删除部分</h1>
 	<p>
+	<h3>单个员工的删除</h3>
+		<br>&nbsp;&nbsp;&nbsp;1.首先在服务器端写删除员工的方法（处理ajax请求的删除逻辑）
+		<br>&nbsp;&nbsp;&nbsp; 1.1需要在mapper中自定义sql语句
+		<br>&nbsp;&nbsp;&nbsp;2.然后在js页面：1.获取到点击删除按钮位置的用户名和id，
+	    <br>&nbsp;&nbsp;&nbsp;2.2然后写弹框是否确认删除该用户，如果是则发送ajax请求处理
+		<br>&nbsp;&nbsp;&nbsp;3.回到当前页
+	<h3>多个员工的删除</h3>
+		<br>&nbsp;&nbsp;&nbsp;1.先创建全选或者全不选框。首先在jsp页面显示表格数据处添加checkbox,然后在js页面创建td,tr元素的地方创建出来，然后追加显示在表格中
+		<br>&nbsp;&nbsp;&nbsp;2.做全选/全不选功能
+		<br>&nbsp;&nbsp;&nbsp;3.完成删除功能。提示是否删除
 		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+	</p>
+
+<h1>第八步：SSM项目总结</h1>
+	<p>
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp;
+	</p>
+	<p>
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
+		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
 	</p>
 
 </body>

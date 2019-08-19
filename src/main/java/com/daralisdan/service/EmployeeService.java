@@ -30,7 +30,7 @@ public class EmployeeService {
   /**
   * 
   * Title：saveEmp <br>
-  * Description：员工保存 <br>
+  * Description：新增员工信息保存 <br>
   * author：yaodan  <br>
   * date：2019年8月15日 下午9:31:58 <br>
   * @param employee <br>
@@ -60,9 +60,44 @@ public class EmployeeService {
 
   }
 
-  public Employee getEmp(Integer id) {
+  /**
+   * 
+   * Title：getEmpId <br>
+   * Description：根据员工Id查询员工信息<br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 上午11:12:16 <br>
+   * @param id
+   * @return <br>
+   */
+  public Employee getEmpId(Integer id) {
     Employee employee = employeeMapper.selectByPrimaryKey(id);
     return employee;
   }
+
+  /**
+   * 
+   * Title：updateEmpId <br>
+   * Description：员工更新 <br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 上午11:11:50 <br>
+   * @param employee <br>
+   */
+  public void updateEmpId(Employee employee) {
+    employeeMapper.updateByprimaryKeySelective(employee);
+  }
+
+  public void deleteEmpById(Integer id) {
+    employeeMapper.deleteByPrimaryKey(id);
+  }
+
+  public void deleteBatch(List<Integer> ids) {
+    EmployeeExample example = new EmployeeExample();
+    Criteria criteria = example.createCriteria();
+//    delete from xxx where emp_id in(1,2,3)
+    criteria.andEmpIdIn(ids);
+    employeeMapper.deleteByExample(example);
+
+  }
+
 
 }

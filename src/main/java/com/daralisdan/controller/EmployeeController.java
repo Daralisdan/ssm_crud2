@@ -1,10 +1,12 @@
 package com.daralisdan.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import javax.websocket.server.PathParam;
+import org.apache.catalina.Contained;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -171,16 +173,87 @@ public class EmployeeController {
    */
   @RequestMapping(value = "/emp/{id}", method = RequestMethod.GET)
   @ResponseBody
-  //Integer id 员工id的值来源于请求地址中的变量，使用@PathVariable该注解指定从路径中取出的id值
-  //表示从前台获取到的员工id(传过来的id),Msg表示返回的数据都放在Msg中
-  public Msg getEmp(@PathVariable("id") Integer id) {
-    //然后根据id查询，返回employee对象
-    Employee employee = employeeService.getEmp(id);
-    //把返回的employee对象的内容放在emp中，返回出去
+  // Integer id 员工id的值来源于请求地址中的变量，使用@PathVariable该注解指定从路径中取出的id值
+  // 表示从前台获取到的员工id(传过来的id),Msg表示返回的数据都放在Msg中
+  public Msg getEmpId(@PathVariable("id") Integer id) {
+    // 然后根据id查询，返回employee对象
+    Employee employee = employeeService.getEmpId(id);
+    // 把返回的employee对象的内容放在emp中，返回出去
     return Msg.success().add("emp", employee);
-
   }
 
+  /**
+   * 
+   * Title：updateEmpId <br>
+   * Description：员工更新
+      * 保存更新员工的数据<br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 上午11:07:50 <br>
+   * @param employee
+   * @return <br>
+   */
+  @ResponseBody
+  //empId 员工id
+  @RequestMapping(value="/emp/{empId}",method=RequestMethod.PUT)
+  public Msg updateEmpId(Employee employee) {
+    //想要打印信息在控制台，就需要在实体类中加上toString方法
+  System.out.println("将要更新的员工数据"+employee);
+    employeeService.updateEmpId(employee);
+    return Msg.success();
 
+  }
+  
+  /**
+   * 
+   * Title：deleteEmpById <br>
+   * Description：根据员工id删除 <br>
+   * author：yaodan  <br>
+   * date：2019年8月19日 下午4:26:13 <br>
+   * @param id
+   * @return <br>
+   *//*
+  @ResponseBody
+  @RequestMapping(value="/emp/{id}",method=RequestMethod.POST)
+  public Msg deleteEmpById(@PathVariable("id")Integer id) {
+    employeeService.deleteEmpById(id);
+    return Msg.success();
+    
+  }*/
+  
+  /**
+   * 
+   * Title：deleteEmpById <br>
+   * Description：单个删除与多个删除二合一 <br>
+   * 批量删除：1-2-3
+   * 单个删除：1
+   * author：yaodan  <br>
+   * date：2019年8月19日 下午4:26:13 <br>
+   * @param id
+   * @return <br>
+   */
+  @ResponseBody
+  @RequestMapping(value="/emp/{ids}",method=RequestMethod.POST)
+  public Msg deleteEmpById(@PathVariable("ids")String ids) {
+    if (ids.contains("-")) {
+      //批量删除
+      //3.id集合
+      List<Integer> del_ids=new ArrayList<>();
+      //1.分割id
+      String[] str_ids=ids.split("-");
+      //4.组装id的集合
+      for (String string : str_ids) {
+        del_ids.add(Integer.parseInt(string));
+      }
+     //2.
+      employeeService.deleteBatch(del_ids);
+    }else {
+      //直接转换
+      Integer id=Integer.parseInt(ids);
+      employeeService.deleteEmpById(id);
+    }
+    return Msg.success();
+    
+  }
+  
 
 }

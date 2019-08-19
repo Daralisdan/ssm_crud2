@@ -180,7 +180,7 @@
 		<div class="row">
 			<div class="col-md-4 col-md-offset-8">
 				<button class="btn btn-primary" id="emp_add_modal_btn">新增</button>
-				<button class="btn btn-danger">删除</button>
+				<button class="btn btn-danger" id="emp_delete_all_btn">删除</button>
 			</div>
 
 		</div>
@@ -191,6 +191,9 @@
 					<!-- 表头 -->
 					<thead>
 						<tr>
+						<th>
+						<input type="checkbox" id="check_all"/>
+						</th>
 							<th>#</th>
 							<th>empName</th>
 							<th>gender</th>
@@ -217,9 +220,11 @@
 	</div>
 
 <!--============ js代码===================================================================-->
-	<script type="text/javascript">
-//定义一个全局变量，保存总记录数
+<script type="text/javascript">
+//定义一个全局变量，保存总记录数,然后给变量赋值当前的总记录数。用户新增完成之后，让信息显示在数据的最后一条
 var totalRecord;
+//定义一个全局变量，保存当前页，然后给变量赋值当前页码。用于修改页面，修改完成之后回到当前页
+var currentPage;
 
 //1.页面加载完成后，直接发送一个ajax请求，获取到分页数据
 $(function(){
@@ -229,8 +234,6 @@ $(function(){
 		});
 
 		//抽取方法，
-		
-		
 		//7.抽取ajax方法，让它最开始来到页面第一页,之后点击跳转页码的方法
 		function to_page(pn){
 			//页面加载完，然后发送ajax请求,获取分页数据
@@ -263,6 +266,7 @@ $(function(){
 				$.each(emps, function(index, item) {
 					//alert(item.empName);
 					//3).创建单元格
+					var chechBox=$("<td><input type='checkbox' class='check_item'/></td>");
 					var empIdTd=$("<td></td>").append(item.empId);
 					var empNameTd=$("<td></td>").append(item.empName);
 					//判断，并处理英文转为英文
@@ -284,7 +288,7 @@ $(function(){
 					.append($("<span></span>").addClass("glyphicon glyphicon-pencil")).append("编辑");
 					
 					//为编辑按钮添加一个自定义属性，来表示当前员工id,item.empId表示员工id的值
-					editBtn.attr("edit-id",item.empId)
+					editBtn.attr("edit-id",item.empId);
 					
 					//删除按钮
 					/**
@@ -296,12 +300,17 @@ $(function(){
 					var delBtn=$("<button></button>").addClass("btn btn-danger btn-sm delete_btn")
 					.append($("<span></span>").addClass("glyphicon glyphicon-trash")).append("删除");
 					
+					//为删除按钮自定义添加一个属性，获取员工id
+					delBtn.attr("del-id",item.empId);
+					
+					
 					//把按钮放在一个单元格中
 					var btnTd=$("<td></td>").append(editBtn).append(" ").append(delBtn)
 					
 					
 					//append方法执行完成以后还是返回原来的元素,appendTo意思是把这些元素添加到哪里去
-					$("<tr></tr>").append(empIdTd).append(empNameTd)
+					$("<tr></tr>").append(chechBox)
+					.append(empIdTd).append(empNameTd)
 					.append(genderTd).append(emailTd)
 					.append(deparmentTd)
 					.append(btnTd)
@@ -319,6 +328,8 @@ $(function(){
 					+" 页,共有 "+result.extend.pageInfo.total+" 条记录");
 		//全局总记录数赋值
 			totalRecord=result.extend.pageInfo.total;
+		//给全局变量赋值，当前页码
+			currentPage=result.extend.pageInfo.pageNum;
 		}
 		
 		//2.2构建解析显示分页条的方法,  2.3点击分页条要能跳转
@@ -478,7 +489,7 @@ $(function(){
 				$("#empName_add_input").next("span").text("用户名可以是2-5位中文或者6-16位英文和数字的组合"); */
 				
 				//8.优化检验显示信息的校验方法 调用抽取的方法
-				show_validate_msg("#empName_add_input","error","用户名可以是2-5位中文或者6-16位英文和数字的组合")
+				show_validate_msg("#empName_add_input","error","用户名可以是2-5位中文或者6-16位英文和数字的组合");
 				return false;
 			}else{
 				//6.1优化检验显示信息
@@ -486,7 +497,7 @@ $(function(){
 				$("#empName_add_input").next("span").text(""); */
 				
 				//8.1优化检验显示信息的校验方法 调用抽取的方法
-				show_validate_msg("#empName_add_input","success","")
+				show_validate_msg("#empName_add_input","success","");
 			};
 			
 			
@@ -502,7 +513,7 @@ $(function(){
 				$("#email_add_input").next("span").text("邮箱格式不正确"); */
 			
 				//8.3优化检验显示信息的校验方法 调用抽取的方法
-				show_validate_msg("#email_add_input","error","邮箱格式不正确")
+				show_validate_msg("#email_add_input","error","邮箱格式不正确");
 				return false;
 			}else{
 				//6.3优化检验显示信息
@@ -510,7 +521,7 @@ $(function(){
 				$("#email_add_input").next("span").text(""); */
 				
 				//8.4优化检验显示信息的校验方法 调用抽取的方法
-				show_validate_msg("#email_add_input","success","")
+				show_validate_msg("#email_add_input","success","");
 			}
 			return true; //都校验成功返回true
 		}
@@ -596,7 +607,7 @@ $(function(){
 
 						//员工保存，1、员工保存之后关闭模态框，2.来到最后一页并显示保存的数据
 						//3.1 员工保存之后关闭模态框
-						$("#empAddModal").modal('hide')
+						$("#empAddModal").modal('hide');
 
 						//3.2.来到最后一页并显示保存的数据
 						//3.2.1发送ajax请求显示最后一页数据即可
@@ -636,6 +647,9 @@ $(function(){
 	 //this表示当前被点击的按钮，然后找到点击被点击的id属性
 	   getEmp($(this).attr("edit-id"));
 	 
+	//4.把员工id传递给模态框的更新按钮
+	 $("#emp_update_btn").attr("edit-id",$(this).attr("edit-id"));
+	 
 	   //0.弹出模态框
 		$("#empUpdateModal").modal({
 			backdrop:"static"//背景删除，设置为背景不删除
@@ -666,10 +680,127 @@ $(function(){
 	}
 	
 	
-	
-	
 //================点击更新按钮，绑定点击事件，完成更新保存=================================================
-	</script>
+	//点击更新，更新员工信息
+	$("#emp_update_btn").click(function(){
+		//1.因为有一个邮箱输入框，验证邮箱是否合法
+		//1.1校验邮箱是否合法
+			//获取到邮箱的值
+			var email=$("#email_update_input").val();
+			var regEmail=/^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$/;
+			if (!regEmail.test(email)) {
+				//检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#email_update_input","error","邮箱格式不正确");
+				return false;
+			}else{
+				//8.4优化检验显示信息的校验方法 调用抽取的方法
+				show_validate_msg("#email_update_input","success","");
+				}
+			
+			//2.邮箱验证成功之后，发送ajax请求保存更新员工的数据
+			$.ajax({
+				url:"<%=request.getContextPath()%>/emp/"+$(this).attr("edit-id"),
+				type:"POST",
+				//ajax发送请求携带的数据，模态框更新的数据提交给后台保存
+				//$("#empUpdateModal form").serialize()表示表单提交后的数据
+				data:$("#empUpdateModal form").serialize()+"&_method=PUT",
+				success:function(result){
+					//alert(result.msg);
+					
+					//3.关闭模态框
+					$("#empUpdateModal").modal("hide");
+					
+					//4.回到本页面,全局变量currentPage
+					to_page(currentPage);
+				}
+			});
+	});
+	
+//==========删除按钮点击事件，删除单个============================================================================================================
+		$(document).on("click",".delete_btn",function(){
+				//1.获取到员工名字,弹出确认弹框
+				
+				//$(this).parents("tr").find("td:eq(1)").text();这句话意思是，this表示当前点击的按钮，parents表示找到祖先节点tr，然后td:eq(1)表示第二个td
+				//意思是当前按钮下祖先父节点是tr，然后找到tr下的第二个td下的文本就是用户名的名字
+				//alert($(this).parents("tr").find("td:eq(1)").text());
+		       
+				//1.1获取到员工名字
+				var empName=$(this).parents("tr").find("td:eq(2)").text();
+		       //1.2获取删除按钮的员工id
+				var empId=$(this).attr("del-id");
+		       //confirm是确认框
+		 if (confirm("确认删除【"+empName+"】吗？")) {
+			//2.如果是确认删除，然后发送ajax请求
+			$.ajax({
+				url:"<%=request.getContextPath()%>/emp/"+empId,
+				type:"POST",
+				success:function(result){
+					alert(result.msg);
+					//3.删除成功之后，回到本页面,全局变量currentPage
+					to_page(currentPage);
+				}
+			});
+		}
+		});
+	
+//==================删除多个，全选/全不选功能=========================================================================	
+	//1.完成全选/全不选功能
+	//1.1给复选框绑定点击事件
+	$("#check_all").click(function(){
+		//1.1.1 attr获取checked是undefind;
+		//1.1.2原生的dom属性，可以用attr获取自定义属性的值
+		
+		//1.1.3 prop修改和读取dom原生属性的值
+		//2.获取勾选上当前的复选框
+		$(".check_item").prop("checked",$(this).prop("checked"));
+	});
+	
+	//3.check_item 这是每个复选框，给他们绑定点击事件
+	$(document).on("click",".check_item",function(){
+	//全选时，取消一个全选按钮也要跟着取消
+		//4.判断当前选择中的元素是否有当前页显示的总个数（即是否有五个）
+		var flag=$(".check_item:checked").length==$(".check_item").length;
+	 //5.然后修改复选框按钮事件属性
+	    $("#check_all").prop("checked",flag);
+	});
+	
+//========完成删除功能=======================================================
+	//点击全不删除时，就就批量删除
+    $("#emp_delete_all_btn").click(function(){
+    	//定义用户名变量
+    	var empName="";
+    	//定义id变量
+    	var del_idstr="";
+    	
+    	//遍历用户名
+    	$.each($(".check_item:checked"),function(){
+    		//组装员工名字的字符串
+    		empName +=$(this).parents("tr").find("td:eq(2)").text()+",";
+    		//组装id名字的字符串
+    		del_idstr +=$(this).parents("tr").find("td:eq(1)").text()+"-";
+    	});
+    	//去除empName多余的","
+    	empName=empName.substring(0,empName.length-1);
+    	//去除多余的-
+    	del_idstr=del_idstr.substring(0,del_idstr.length-1);
+    	 if (confirm("确认删除【"+empName+"】吗？")) {
+ 			//如果是确认删除，然后发送ajax请求
+ 			$.ajax({
+ 				url:"<%=request.getContextPath()%>/emp/"+del_idstr,
+ 				type:"POST",
+ 				success:function(result){
+ 					alert(result.msg);
+ 					//3.删除成功之后，回到本页面,全局变量currentPage
+ 					to_page(currentPage);
+ 				}
+ 			});
+ 		}
+    });
+	
+	
+	
+	
+</script>
 
 </body>
 </html>
