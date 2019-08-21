@@ -215,16 +215,26 @@
 
 <h1>第八步：SSM项目总结</h1>
 	<p>
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp;
+		1该项目.首先与用户交互的是UI界面，使用bootstrap前端框架快速搭建，用户发送请求<br>
+		2.请求来到Tomcat服务器，Tomcat作为serverNet容器进行处理请求;tomcat中有许多项目，当前项目只是其中一个小项目<br>
+		3.逻辑：如果页面发送请求，tomcat找到当前项目，当前项目收到请求之后，用ssm组合处理。请求第一步会被springmvc的前端控制器接收拦截之后进行处理，然后找到判断能不能处理请求；
+		如果可以处理就调用Controller控制器某一个处理请求的方法来处理请求，如果不能处理请求，springmvc配置文件中配置了默认处理器，不能处理的请求（静态资源）就交给Tomcat服务器处理
+		<br>能处理的请求就调用service层的业务逻辑，service层如果要进行数据库的交互，就调用dao层的组件，（dao的组件是用mybatis逆向工程自动生成的	）mybatis生成的mapper直接与数据库（DB）交互
+			mapper直接操作数据库的增删改查；（MBG生成Mapper接口，mapper文件，自动生成的有局限性，如果不够用的，复杂的查询，在基于mapper之上，定义一些新的方法)
+			(mapper之所以能用是因为在项目启动的时候，在spring配置文件中整合了mybatis，spring容器启动的时候自动扫描mapper接口（dao层）)；组件与组件之间使用自动装配，可以使用该组件的逻辑<br>
+			4.数据处理查询完成之后，就会交给用户，用户查看结果；使用ajax请求（没有让前端控制器直接返回跳转一个页面，只是页面列表显示的时候找到返回页面了，剩下的增删改查都使用的是ajax）之后相当于是处理的结果返回的是Json字符串，
+			浏览器收到的是返回的json，返回的json就可以页面不刷新，使用js解析json在页面显示<br>
+			5.使用spring做组件管理，springmvc收到请求来处理，每个组件用自动装配，到dao层使用mybatis<br>
+			6.使用maven依赖管理和项目构建（依赖管理是：项目中使用的其他jar是用maven导入到服务器中；eclipse是一个镜像服务器）；用maven的好处是停掉eclipse镜像服务器，使用maven install把项目打包，会在项目中target中生成war包，可以在Tomcat中启动
+	<br>然后复制war包到Tomcat服务器，Tomcat启动时这个项目就会自动部署，（在cmd启动start.up）
+	<h3>项目注意点</h3>
+	<p>1.新增，修改，引入数据校验（前端，后端）<br>
+	2.删除，单个&批量
+	<br>3.mybatis generator-xxxmapper
+	<br>4.使用ajax 然后springmvc就使用注解responseBody就行了
 	</p>
-	<p>
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
-		<br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp; <br>&nbsp;&nbsp;&nbsp;
 	</p>
+	
 
 </body>
 </html>
